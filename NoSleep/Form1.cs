@@ -49,8 +49,8 @@ namespace NoSleep
             //Attach the Elapsed event to the timer
             timer.Elapsed += TimerElapsed;
 
-            //Set the timer at 2 seconds
-            timer.Interval = 2000;
+            //Set the timer at 59 seconds
+            timer.Interval = 59 * 1000;
             timer.AutoReset = true;
         }
 
