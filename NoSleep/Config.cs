@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace NoSleep
@@ -36,7 +31,7 @@ namespace NoSleep
         //Read the JSON config file
         public static Config ReadConfig()
         {
-            string s = "";
+            string s = null;
 
             using (StreamReader streamReader = new StreamReader(Path.Combine(GetNoSleepPath(), @"config.json")))
             {
