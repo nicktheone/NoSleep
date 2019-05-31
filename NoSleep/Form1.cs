@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Timers;
+using System.Diagnostics;
 
 namespace NoSleep
 {
@@ -52,8 +53,13 @@ namespace NoSleep
         private static ContextMenuStrip AddContextMenuStrip()
         {
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-            contextMenuStrip.Items.Add("Exit");
-            contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
+            contextMenuStrip.Items.Add("Exit", null, Exit_ItemClicked);
+            contextMenuStrip.Items.Add("Shutdown");
+            (contextMenuStrip.Items[1] as ToolStripMenuItem).DropDownItems.Add("30 mins", null, Shutdown_ItemClicked);
+            (contextMenuStrip.Items[1] as ToolStripMenuItem).DropDownItems.Add("60 mins", null, Shutdown_ItemClicked);
+            (contextMenuStrip.Items[1] as ToolStripMenuItem).DropDownItems.Add("90 mins", null, Shutdown_ItemClicked);
+            (contextMenuStrip.Items[1] as ToolStripMenuItem).DropDownItems.Add("120 mins", null, Shutdown_ItemClicked);
+            //contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
 
             return contextMenuStrip;
         }
@@ -79,11 +85,25 @@ namespace NoSleep
 
         #region Events
 
+        //Shutdown the computer
+        private static void Shutdown_ItemClicked(object sender, EventArgs e)
+        {
+            string command = (sender as ToolStripMenuItem).Text;
+            int trimmedCommand = Convert.ToInt16(command.Remove(command.Length - 5));
+            string shutdownCommand = String.Format("/s /t {0}", trimmedCommand * 60);
+
+            Process.Start(new ProcessStartInfo("shutdown", shutdownCommand)
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            });
+        }
+
         //Exit the application
-        private static void ContextMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private static void Exit_ItemClicked(object sender, EventArgs e)
         {
             Application.Exit();
-        }
+        } 
 
         //Simulate the keystroke when the timer ticks
         private static void TimerElapsed(object sender, ElapsedEventArgs e)
